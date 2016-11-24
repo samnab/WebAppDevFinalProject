@@ -7,7 +7,52 @@ var cheerio = require('cheerio');
 var app     = express();
 var numclasses = 0;
 
+function getTimeBit(time){
+    //Returns the bit set for time.
+    var shifts = -14; //Doors open at 7:00. Therefore, a time of 7:00 will represent 0 shifts.
+    if (time.indexOf("pm") != -1) {
+        shifts += 24; //If in the evening, shift 12 more hours (24 places).
+    }
+    if (time.indexOf("30") != -1 || time.indexOf("40") != -1) {
+        shifts += 1; //If on the half-hour, shift by 1.
+    }
+    var hours = parseInt(time.split(":")[0]);
+    if (hours != 12) shifts += hours * 2; // skip 12:00, for obvious reasons
+    return shifts;
+}
+
+function getDurationBits(starttime,endtime){
+    var shifts = [];
+    //Returns the bits set for a duration (as an array).
+    var firstshifts = -14; //As per binarifyTime, but for the first number only - and without actually doing the shifting.
+    if (starttime.indexOf("pm") != -1) {
+        firstshifts += 24;
+    }
+    if (starttime.indexOf("30") != -1 || starttime.indexOf("40") != -1) {
+        firstshifts += 1;
+    }
+    var hours = parseInt(starttime.split(":")[0]);
+    if (hours != 12) firstshifts += hours * 2;
+    
+    var lastshifts = -14; //Now we do this again, for the end time.
+    if (endtime.indexOf("pm") != -1) {
+        lastshifts += 24;
+    }
+    if (endtime.indexOf("30") != -1 || endtime.indexOf("40") != -1) {
+        lastshifts += 1;
+    }
+    
+    hours = parseInt(endtime.split(":")[0]);
+    if (hours != 12) lastshifts += hours * 2;
+    var number = 0;
+    for (var i = firstshifts; i <= lastshifts; i++){
+        shifts.push(i); //create an array of all the flagged bits
+    }
+    return shifts;
+}
+
 function binarifyTime(time){
+    //Returns the binary representation of a time.
     var shifts = -14; //Doors open at 7:00. Therefore, a time of 7:00 will represent 0 shifts.
     if (time.indexOf("pm") != -1) {
         shifts += 24; //If in the evening, shift 12 more hours (24 places).
@@ -21,6 +66,7 @@ function binarifyTime(time){
     return number;
 }
 function binarifyDuration(starttime,endtime){
+    //Returns the binary representation of a duration.
     var firstshifts = -14; //As per binarifyTime, but for the first number only - and without actually doing the shifting.
     if (starttime.indexOf("pm") != -1) {
         firstshifts += 24;
