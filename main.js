@@ -185,7 +185,7 @@ app.get('/sample', function(req, res){
                                         "room" : lastroom
                                     });
                                     numclasses++; //Increment number of classes.
-                                    db.collection("rooms").update({"room" : lastroom}, 
+                                    db.collection("rooms").update({"room" : lastroom, "day" : lastday}, 
                                         {$bit : {"times" : { or : bindur}}},
                                         {"new":true, "upsert":true}
                                     );
