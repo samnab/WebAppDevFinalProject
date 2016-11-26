@@ -2,8 +2,6 @@
 body {
 	font-family: 'Roboto', sans-serif;
 }
-.container {
-}
 .container.full {
 	width: 100%;
 }
@@ -83,14 +81,14 @@ body {
 	background: #4b3a8d;
 }
 .fc-unthemed .fc-content, .fc-unthemed .fc-divider, .fc-unthemed .fc-list-heading td, .fc-unthemed .fc-list-view, .fc-unthemed .fc-popover, .fc-unthemed .fc-row, .fc-unthemed tbody, .fc-unthemed td, .fc-unthemed th, .fc-unthemed thead {
-	border-color: #0f0;
-	/*border-color: transparent;*/
+	/*border-color: #0f0;*/
+	border-color: transparent;
 }
 .fc-unthemed .fc-today {
-	background: #f1f1f1;
+	background: #423182;
 }
 .fc-state-highlight {
-	background: #fff7f7;
+	/*background: #fff7f7;*/
 }
 .fc-event, .fc-event-dot {
 	background-color: #03ac05;
@@ -112,6 +110,11 @@ body {
 }
 .fc-content-skeleton tr td.fc-event-container:nth-child(6n+0) a {
 	background: #fff;
+}
+.fc-day-number {
+	font-size: 14px;
+	font-weight: 100;
+	color: #fff;
 }
 
 /* COLOURS */
