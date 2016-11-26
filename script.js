@@ -71,7 +71,11 @@ $(document).ready(function(){
   });
 
 	var view = calendar.fullCalendar('getView');
-	$('.cal_month').html(view.title);
+	// $('.cal_month').html(view.title);
+	$('.fc-toolbar .fc-left').clone().appendTo('.cal_month .fc-toolbar');
+	// $('.fc-toolbar .fc-left').change(function() {
+	// 	$('.cal_month').html($(this).html());
+	// });
 
 	$('.btn-selector').click(function() {
 		$(this).closest('.row').find('.btn-selector').removeClass('selected');
@@ -93,7 +97,7 @@ $(document).ready(function(){
 	// Equalize calendar columns' height
 	var max_h = $('.calendar-right').height();
 	console.log(max_h);
-	$('.calendar-left').css('height', max_h);
+	$('.calendar-left').css('height', max_h+80);
 
   // $("#datepicker").on("click", function(){
   //   $('#datepicker').datepicker({
