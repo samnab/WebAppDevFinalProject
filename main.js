@@ -4,6 +4,7 @@ var express = require('express');
 var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
+var moment = require('moment');
 var app     = express();
 var numclasses = 0;
 
@@ -33,7 +34,7 @@ function getDurationBits(starttime,endtime){
     }
     var hours = parseInt(starttime.split(":")[0]);
     if (hours != 12) firstshifts += hours * 2;
-    
+
     var lastshifts = -14; //Now we do this again, for the end time.
     if (endtime.indexOf("pm") != -1) {
         lastshifts += 24;
@@ -41,7 +42,7 @@ function getDurationBits(starttime,endtime){
     if (endtime.indexOf("30") != -1 || endtime.indexOf("40") != -1) {
         lastshifts += 1;
     }
-    
+
     hours = parseInt(endtime.split(":")[0]);
     if (hours != 12) lastshifts += hours * 2;
     var number = 0;
@@ -76,7 +77,7 @@ function binarifyDuration(starttime,endtime){
     }
     var hours = parseInt(starttime.split(":")[0]);
     if (hours != 12) firstshifts += hours * 2;
-    
+
     var lastshifts = -14; //Now we do this again, for the end time.
     if (endtime.indexOf("pm") != -1) {
         lastshifts += 24;
@@ -84,7 +85,7 @@ function binarifyDuration(starttime,endtime){
     if (endtime.indexOf("30") != -1 || endtime.indexOf("40") != -1) {
         lastshifts += 1;
     }
-    
+
     hours = parseInt(endtime.split(":")[0]);
     if (hours != 12) lastshifts += hours * 2;
     var number = 0;
@@ -114,15 +115,15 @@ app.get('/sample', function(req, res){
             var lasttime = "ERROR";
             var lastday = "ERROR";
             var lastroom = "ERROR";
-            
+
             //We need to work with "MongoClient" interface in order to connect to a mongodb server.
             var MongoClient = mongodb.MongoClient;
             // Connection URL. This is where your mongodb server is running.
-            
+
             var Server = mongodb.Server, database = mongodb.Db, BSON = mongodb.BSONPure;
             var server = new Server('localhost', 27017, {auto_reconnect: true});
             db = new database('coursedb', server);
-            
+
             db.open(function(err,db){
                 if (!err) {
                     console.log("Connected to 'coursedb' database");
@@ -134,7 +135,7 @@ app.get('/sample', function(req, res){
                             db.collection('courses').remove({});
                             db.collection('rooms').remove({});
                         }
-                        
+
                         //parse the collection
                         if($("table.bordertable").find("tr").length == 0){
                             console.log("ERROR: Length of the loaded document found to be 0. Something weird's going on!")
@@ -185,7 +186,7 @@ app.get('/sample', function(req, res){
                                         "room" : lastroom
                                     });
                                     numclasses++; //Increment number of classes.
-                                    db.collection("rooms").update({"room" : lastroom, "day" : lastday}, 
+                                    db.collection("rooms").update({"room" : lastroom, "day" : lastday},
                                         {$bit : {"times" : { or : bindur}}},
                                         {"new":true, "upsert":true}
                                     );
