@@ -1,0 +1,98 @@
+/* NAVBAR */
+.navbar-default {
+	background: #f7f8fa;
+	border-bottom: 1px solid #e7e6eb;
+	margin-bottom: 0;
+}
+.navbar .container {
+	padding: 0;
+}
+
+/* GLOBAL */
+.container {
+	padding: 20px;
+}
+.container.full {
+	width: 100%;
+}
+
+/* BUTTONS */
+.cal_view .btn-default.selected {
+	background: #1b81d6;
+	border: 2px solid #1b81d6;
+	color: #fff;
+}
+.cal_view .btn-default.selected:hover {
+	background: #1b81d6;
+	border-color: #1d75cc;
+}
+.cal_view .btn-default {
+	border: 2px solid #e9e9e9;
+}
+.cal_view .btn-default:hover {
+	background: #fff;
+	border-color: #1b81d6;
+}
+
+/* WEATHER */
+.weather {
+	margin-top: 25%
+}
+.weather-icon {
+	font-size: 80px;
+	text-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+}
+
+/* CALENDAR */
+.fc-day {
+	background: #fff;
+}
+.fc-unthemed .fc-today {
+	background: #f1f1f1;
+}
+.fc-state-highlight {
+	background: #fff7f7;
+}
+.fc-event, .fc-event-dot {
+	background-color: #03ac05;
+}
+.fc-content-skeleton tr td.fc-event-container:nth-child(1n+0) a {
+	background: #f00;
+}
+.fc-content-skeleton tr td.fc-event-container:nth-child(2n+0) a {
+	background: #0f0;
+}
+.fc-content-skeleton tr td.fc-event-container:nth-child(3n+0) a {
+	background: #00f;
+}
+.fc-content-skeleton tr td.fc-event-container:nth-child(4n+0) a {
+	background: #ff0;
+}
+.fc-content-skeleton tr td.fc-event-container:nth-child(5n+0) a {
+	background: #0ff;
+}
+.fc-content-skeleton tr td.fc-event-container:nth-child(6n+0) a {
+	background: #fff;
+}
+
+/* COLOURS */
+.bg-white {
+	background: #fff;
+}
+.bg-grey {
+	background: #f8f9fb;
+}
+.bg-purple {
+	background: #4b3a8d;
+	color: #fff;
+}
+.bg-dark-purple {
+	background: #423182;
+}
+
+/* MARGINS */
+
+/* PADDING */
+.p-lg {
+	padding: 50px;
+}
