@@ -95,6 +95,10 @@ function binarifyDuration(starttime, endtime) {
 	return number;
 }
 
+function dec2bin(dec) {
+	return (dec >>> 0).toString(2);
+}
+
 function getRoomData() {
 	mongodb.connect("mongodb://localhost:27017/coursedb", function (err, db) {
 		if (err) {
@@ -107,10 +111,14 @@ function getRoomData() {
 			room: {
 				$regex: /^((?!ONLINE).)*$/
 			}
-		}).toArray(function (err, items) {
-			items.forEach(function (item) {
-				console.log(item.room + "(times: " + item.times + ")");
-			});
+		}).toArray(function (err, item) {
+			var i = 2;
+			var g = dec2bin(item[i].times);
+
+			console.log(g.length);
+			//items.forEach(function (item) {
+			console.log(item[1].room + " on " + item[i].day + "(times: " + g + ")");
+			//});
 		});
 
 	});
@@ -203,7 +211,12 @@ app.get('/sample', function (req, res) {
 								if (lasttime != "TBA") {
 									var times = lasttime.split("-");
 									bindur = binarifyDuration(times[0], times[1]);
-									//console.log(times[0] + " " + times[1] + ": " + bindur);
+
+									var g = true;
+									if (g) {
+										console.log(times[0] + " " + times[1] + ": " + bindur);
+										g = false;
+									}
 									db.collection("courses").save({
 										"class": lastclass,
 										"day": lastday,
