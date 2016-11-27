@@ -123,7 +123,7 @@ function getRoomData() {
 			console.log(item[i].room + " on " + item[i].day + "(times: " + g + ")");
 
 			// write file as JSON
-			fs.writeFile("rooms.json", JSON.stringify(item), function(err){
+			fs.writeFile("rooms.json", JSON.stringify(item, null, "\t"), function(err){
 				if(err){
 					console.log(err);
 					return;
