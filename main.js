@@ -96,39 +96,23 @@ function binarifyDuration(starttime, endtime) {
 }
 
 function getRoomData() {
-	// Retrieve
-	var MongoClient = require('mongodb').MongoClient;
-
-	// Connect to the db
-	MongoClient.connect('mongodb://localhost:27017/coursedb', function (err, db) {
+	mongodb.connect("mongodb://localhost:27017/coursedb", function (err, db) {
 		if (err) {
 			return console.dir(err);
-		} else {
-			console.log("Database is connected")
 		}
 
-		var collection = db.collection('rooms');
+		var collection = db.collection("rooms");
+		var arr;
+		collection.find({
+			room: {
+				$ne: {
+					$regex: "ONLINE.+"
+				}
+			}
+		}).toArray(function (err, items) {
 
-		var roomColl = collection.find({
-			"room": {
-				"": /ONLINE.*/
-			}
-		}, function (err, room) {
-			if (err) {
-				return console.dir(err);
-			} else {
-				console.log("Room colletion retrieved");
-			}
+			console.log(items[0].times);
 		});
-
-		console.log("HELLO");
-		/*.toArray(function (err, rooms) {
-			if (err) {
-				console.log(err);
-			}
-		});*/
-
-		db.close();
 	});
 }
 
@@ -252,14 +236,16 @@ app.get('/sample', function (req, res) {
 			});
 			console.log(numclasses);
 			res.send('Check your console! And your database!');
+
+			getRoomData();
+
+
 		}
 	})
 
-	getRoomData();
 });
 
 
-
-app.listen('8081')
+app.listen('8081');
 console.log('Connected on port 8081.');
 exports = module.exports = app;
