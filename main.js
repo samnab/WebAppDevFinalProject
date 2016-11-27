@@ -97,40 +97,32 @@ function binarifyDuration(starttime, endtime) {
 	return number;
 }
 
-function getRoomData() {
-	// Retrieve
-	var MongoClient = require('mongodb').MongoClient;
+function dec2bin(dec) {
+	return (dec >>> 0).toString(2);
+}
 
-	// Connect to the db
-	MongoClient.connect('mongodb://localhost:27017/coursedb', function (err, db) {
+function getRoomData() {
+	mongodb.connect("mongodb://localhost:27017/coursedb", function (err, db) {
 		if (err) {
 			return console.dir(err);
-		} else {
-			console.log("Database is connected")
 		}
 
-		var collection = db.collection('rooms');
+		var collection = db.collection("rooms");
 
-		var roomColl = collection.find({
-			"room": {
-				"": /ONLINE.*/
+		collection.find({
+			room: {
+				$regex: /^((?!ONLINE).)*$/
 			}
-		}, function (err, room) {
-			if (err) {
-				return console.dir(err);
-			} else {
-				console.log("Room colletion retrieved");
-			}
+		}).toArray(function (err, item) {
+			var i = 2;
+			var g = dec2bin(item[i].times);
+
+			console.log(g.length);
+			//items.forEach(function (item) {
+			console.log(item[1].room + " on " + item[i].day + "(times: " + g + ")");
+			//});
 		});
 
-		console.log("HELLO");
-		/*.toArray(function (err, rooms) {
-			if (err) {
-				console.log(err);
-			}
-		});*/
-
-		db.close();
 	});
 }
 
@@ -221,7 +213,12 @@ app.get('/sample', function (req, res) {
 								if (lasttime != "TBA") {
 									var times = lasttime.split("-");
 									bindur = binarifyDuration(times[0], times[1]);
-									//console.log(times[0] + " " + times[1] + ": " + bindur);
+
+									var g = true;
+									if (g) {
+										console.log(times[0] + " " + times[1] + ": " + bindur);
+										g = false;
+									}
 									db.collection("courses").save({
 										"class": lastclass,
 										"day": lastday,
@@ -254,15 +251,21 @@ app.get('/sample', function (req, res) {
 			});
 			console.log(numclasses);
 			res.send('Check your console! And your database!');
+
+
+
 		}
 	})
 
+<<<<<<< HEAD
 	getRoomData();
 
+=======
+>>>>>>> refs/remotes/origin/master
 });
 
+getRoomData();
 
-
-app.listen('8081')
+app.listen('8081');
 console.log('Connected on port 8081.');
 exports = module.exports = app;
