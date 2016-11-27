@@ -102,17 +102,17 @@ function getRoomData() {
 		}
 
 		var collection = db.collection("rooms");
-		var arr;
+
 		collection.find({
 			room: {
-				$ne: {
-					$regex: "ONLINE.+"
-				}
+				$regex: /^((?!ONLINE).)*$/
 			}
 		}).toArray(function (err, items) {
-
-			console.log(items[0].times);
+			items.forEach(function (item) {
+				console.log(item.room + "(times: " + item.times + ")");
+			});
 		});
+
 	});
 }
 
@@ -237,7 +237,6 @@ app.get('/sample', function (req, res) {
 			console.log(numclasses);
 			res.send('Check your console! And your database!');
 
-			getRoomData();
 
 
 		}
@@ -245,6 +244,7 @@ app.get('/sample', function (req, res) {
 
 });
 
+getRoomData();
 
 app.listen('8081');
 console.log('Connected on port 8081.');
