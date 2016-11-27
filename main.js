@@ -5,6 +5,7 @@ var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
 var app = express();
+
 var numclasses = 0;
 
 function getTimeBit(time) {
@@ -49,6 +50,7 @@ function getDurationBits(starttime, endtime) {
 		shifts.push(i); //create an array of all the flagged bits
 	}
 	return shifts;
+
 }
 
 function binarifyTime(time) {
@@ -100,6 +102,7 @@ function dec2bin(dec) {
 }
 
 function getRoomData() {
+	var array = [];
 	mongodb.connect("mongodb://localhost:27017/coursedb", function (err, db) {
 		if (err) {
 			return console.dir(err);
@@ -116,9 +119,19 @@ function getRoomData() {
 			var g = dec2bin(item[i].times);
 
 			console.log(g.length);
-			//items.forEach(function (item) {
-			console.log(item[1].room + " on " + item[i].day + "(times: " + g + ")");
-			//});
+			// items.forEach(function (item) {
+			console.log(item[i].room + " on " + item[i].day + "(times: " + g + ")");
+
+			// write file as JSON
+			fs.writeFile("rooms.json", JSON.stringify(item), function(err){
+				if(err){
+					console.log(err);
+					return;
+				}
+				console.log("exported " + item.length + " records");
+			});
+
+			// });
 		});
 
 	});
@@ -249,8 +262,6 @@ app.get('/sample', function (req, res) {
 			});
 			console.log(numclasses);
 			res.send('Check your console! And your database!');
-
-
 
 		}
 	})
