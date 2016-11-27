@@ -7,10 +7,18 @@ $(document).ready(function(){
       right:  'today, prev,next'
     },
     theme: false,
-		defaultView: 'basicWeek',
+		defaultView: 'agendaWeek',
 		defaultDate: '2016-11-10',
+		disableDragging: true,
 		navLinks: true, // can click day/week names to navigate views
-		editable: true,
+		dayClick: function(date, jsEvent, view){
+			calendar.fullCalendar('gotoDate', date);
+			calendar.fullCalendar('changeView', 'agendaDay');
+
+			$('.btn-selector').closest('.row').find('.btn-selector').removeClass('selected');
+			$('div[data-type*=day').addClass('selected');
+		},
+		editable: false,
 		eventLimit: true, // allow "more" link when too many events
 		events: [
 			{
@@ -75,21 +83,35 @@ $(document).ready(function(){
 		var type = $(this).attr('data-type');
 		switch(type) {
 			case 'day':
-			  calendar.fullCalendar('changeView', 'basicDay');
+			  calendar.fullCalendar('changeView', 'agendaDay');
 				break;
 			case 'week':
-			  calendar.fullCalendar('changeView', 'basicWeek');
+			  calendar.fullCalendar('changeView', 'agendaWeek');
 				break;
 			case 'month':
 			  calendar.fullCalendar('changeView', 'month');
+				break;
+			case 'list':
+			  calendar.fullCalendar('changeView', 'listWeek');
 				break;
 		}
 		$(this).addClass('selected');
 	});
 
 	// Equalize calendar columns' height
-	var max_h = $('.calendar-right').height();
-	console.log(max_h);
-	$('.calendar-left').css('height', max_h+80);
+	function equalize_height() {
+		var max_h = $('.calendar-right').height();
+		$('.calendar-left').css('height', max_h+80);
+	}
 
+	if($(this).width()>=768)
+		equalize_height();
+
+	$(window).resize(function() {
+		console.log($(this).width());
+		if($(this).width()>=768)
+			equalize_height();
+		else
+			$('.calendar-left').css('height', 'auto');
+	});
 });

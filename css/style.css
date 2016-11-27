@@ -163,3 +163,14 @@ a.fc-day-grid-event {
 .p-md {
 	padding: 20px;
 }
+
+@media (max-width: 992px) {
+	.container {
+		width: 100%;
+	}
+}
+@media (max-width: 768px) {
+	.weather {
+		margin-top: 0;
+	}
+}
