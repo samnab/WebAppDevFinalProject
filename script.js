@@ -1,5 +1,40 @@
 $(document).ready(function(){
+	var OWMApiKey = "1eb3724098349c776aa10b48e8ec1d53";
 	var calendar = $("#calendar");
+
+	if(navigator.geolocation){
+		console.log("geolocation is supported!")
+		setTimeout(getWeatherData, 1000);
+	}else{
+		console.log("geoloaction is not supported");
+	}
+
+	function getWeatherData(){
+		navigator.geolocation.getCurrentPosition(function(position){
+			console.log("lat: " + position.coords.latitude + " lon: " + position.coords.longitude);
+			$.ajax({
+				url: "http://api.openweathermap.org/data/2.5/weather?lat=" + position.coords.latitude
+				+"&lon=" + position.coords.longitude + "&units=metric&APPID=" + OWMApiKey,
+				type: "GET",
+				dataType: "json",
+				success: function(data){
+					$(".weather-locale").html(
+						"" + data.name
+					);
+					$(".weather-temp").html(
+						"" + data.main.temp + "<span>&deg;C</span>"
+					);
+					var weathericon = $(".weather-icon").children('i');
+					weathericon.removeClass('wi wi-day-snow-wind');
+					weathericon.addClass('wi wi-owm-' + data.weather[0].id);
+				},
+				error: function(){
+						console.log("error has occured with downloadWeather");
+				}
+			});
+		});
+	}
+
 	calendar.fullCalendar({
     header:{
       left:   'title',
@@ -114,4 +149,7 @@ $(document).ready(function(){
 		else
 			$('.calendar-left').css('height', 'auto');
 	});
+
+
+
 });
