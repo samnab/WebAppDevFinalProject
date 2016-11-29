@@ -153,40 +153,76 @@ function getFreeRooms(start,finish){
     //data can be accessed like roomsout[0].room
 }
 
+function dateReturn(day) {
+	var ret;
+	switch (day) {
+	case " SUN":
+		ret = 1;
+		break;
+	case " MON":
+		ret = 2;
+		break;
+	case " TUE":
+		ret = 3;
+		break;
+	case " WED":
+		ret = 4;
+		break;
+	case " THU":
+		ret = 5;
+		break;
+	case " FRI":
+		ret = 6;
+		break;
+	case " SAT":
+		ret = 7;
+		break;
+	}
+
+	return ret;
+}
+
 function getRoomData() {
-	var array = [];
 	mongodb.connect("mongodb://localhost:27017/coursedb", function (err, db) {
 		if (err) {
 			return console.dir(err);
 		}
 
-		var collection = db.collection("rooms");
+		var collection = db.collection("courses");
 
 		collection.find({
 			room: {
 				$regex: /^((?!ONLINE).)*$/
 			}
-		}).toArray(function (err, item) {
-			var i = 2;
-			var g = dec2bin(item[i].times);
+		}).toArray(function (err, items) {
+			var arr = [];
+			items.forEach(function (item) {
+				var time = String(item.times);
+				console.log(time);
+				var times = time.split("-");
 
-			console.log(g.length);
-			// items.forEach(function (item) {
-			console.log(item[i].room + " on " + item[i].day + "(times: " + g + ")");
+				var title = item.room;
+				var start = '2017-01-0' + dateReturn(item.day) + "t" + times[0];
+				var end = '2017-01-0' + dateReturn(item.day) + "t" + times[1];
 
-			// write file as JSON
-			fs.writeFile("rooms.json", JSON.stringify(item, null, "\t"), function(err){
-				if(err){
-					console.log(err);
-					return;
+				var obj = {
+					title: title,
+					start: start,
+					end: end
 				}
-				console.log("exported " + item.length + " records");
-			});
+				arr.push(obj);
+				fs.writeFile("courses.json", JSON.stringify(arr, null, "\t"), function (err) {
+					if (err) {
+						console.log(err);
+						return;
+					}
+				});
 
-			// });
+			});
 		});
 	});
 }
+
 
 function initialize(){
     // Placeholder URL for now.
@@ -325,7 +361,7 @@ app.post('/sample',function(request, response) {
     response.render('main', {somedata:output});
 });
 
-//getRoomData();
+getRoomData();
 initialize();
 getFreeRooms("7:00 am","9:00 am");
 
