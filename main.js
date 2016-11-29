@@ -320,6 +320,16 @@ app.get('/sample', function (req, res) {
 
 });
 
+app.post('/',function(request, response) {
+    var rooms = [];
+    var start = request.body['start'];
+    var end = request.body['end'];
+    rooms = getFreeRooms(start,end);
+    //[EDIT HERE]: edit rooms into a more nicely-formatted result
+    var output = "Formatted output goes here."
+    response.render('main', {somedata:output});
+});
+
 //getRoomData();
 getFreeRooms("7:00 am","9:00 am");
 
