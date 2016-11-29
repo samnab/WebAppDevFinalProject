@@ -6,6 +6,26 @@ var request = require('request');
 var cheerio = require('cheerio');
 var app = express();
 
+var today = new Date();
+
+var day_of_week = "ERROR";
+if(today.getDay() == 0){
+    day_of_week = " SUN";
+} else if(today.getDay() == 0){
+    day_of_week = " MON";
+} else if(today.getDay() == 0){
+    day_of_week = " TUE";
+} else if(today.getDay() == 0){
+    day_of_week = " WED";
+} else if(today.getDay() == 0){
+    day_of_week = " THU";
+} else if(today.getDay() == 0){
+    day_of_week = " FRI";
+} else if(today.getDay() == 0){
+    day_of_week = " SAT";
+}
+
+
 var numclasses = 0;
 
 function getTimeBit(time) {
@@ -99,6 +119,38 @@ function binarifyDuration(starttime, endtime) {
 
 function dec2bin(dec) {
 	return (dec >>> 0).toString(2);
+}
+
+function getFreeRooms(start,finish){
+    //returns an array of rooms that are free from the given start to finish time
+    var timestocheck = getDurationBits(start,finish);
+    console.log(timestocheck.toString());
+    var roomsout = allrooms.slice();
+	mongodb.connect("mongodb://localhost:27017/coursedb", function (err, db) {
+		if (err) {
+			return console.dir(err);
+		}
+		var collection = db.collection("rooms");
+		collection.find({
+			room: {
+				$regex: /^((?!ONLINE).)*$/
+			},
+            day: day,
+            times: {
+                $bitsAllClear: timestocheck
+            }
+		}).toArray(function (err, item) {
+            var count = 0;
+			item.forEach(function (i) {
+                roomsout.push(i);
+                count++;
+            });
+            console.log("retrieved " + count + " records");
+		});
+
+	});
+    return roomsout;
+    //data can be accessed like roomsout[0].room
 }
 
 function getRoomData() {
@@ -268,7 +320,8 @@ app.get('/sample', function (req, res) {
 
 });
 
-getRoomData();
+//getRoomData();
+getFreeRooms("7:00 am","9:00 am");
 
 app.listen('8081');
 console.log('Connected on port 8081.');
