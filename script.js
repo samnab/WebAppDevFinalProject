@@ -2,12 +2,12 @@ $(document).ready(function () {
 	var OWMApiKey = "1eb3724098349c776aa10b48e8ec1d53";
 	var calendar = $("#calendar");
 
-	// if (navigator.geolocation) {
-	// 	console.log("geolocation is supported!")
-	// 	setTimeout(getWeatherData, 1000);
-	// } else {
-	// 	console.log("geoloaction is not supported");
-	// }
+	if (navigator.geolocation) {
+		console.log("geolocation is supported!")
+		setTimeout(getWeatherData, 1000);
+	} else {
+		console.log("geoloaction is not supported");
+	}
 
 	function getWeatherData() {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -17,11 +17,13 @@ $(document).ready(function () {
 				type: "GET",
 				dataType: "json",
 				success: function (data) {
+					var temp = Math.round(data.main.temp);
+
 					$(".weather-locale").html(
 						"" + data.name
 					);
 					$(".weather-temp").html(
-						"" + data.main.temp + "<span>&deg;C</span>"
+						"" + temp + "<span>&deg;C</span>"
 					);
 					var weathericon = $(".weather-icon").children('i');
 					weathericon.removeClass('wi wi-day-snow-wind');
