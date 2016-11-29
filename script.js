@@ -55,7 +55,7 @@ $(document).ready(function () {
 			$('div[data-type*=day').addClass('selected');
 		},
 		eventLimit: true, // allow "more" link when too many events
-		events: [
+		events: [ // error with the file fetching keeps occuring so this is a cheat
 			{
 				"title": "DTA219",
 				"start": "2017-01-06T09:40",
