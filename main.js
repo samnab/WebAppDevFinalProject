@@ -185,12 +185,11 @@ function getRoomData() {
 
 			// });
 		});
-
 	});
 }
 
-app.get('/sample', function (req, res) {
-	// Placeholder URL for now.
+function initialize(){
+    // Placeholder URL for now.
 
 	page_url = 'http://www.imdb.com/title/tt1229340/';
 
@@ -276,12 +275,6 @@ app.get('/sample', function (req, res) {
 								if (lasttime != "TBA") {
 									var times = lasttime.split("-");
 									bindur = binarifyDuration(times[0], times[1]);
-
-									var g = true;
-									if (g) {
-										console.log(times[0] + " " + times[1] + ": " + bindur);
-										g = false;
-									}
 									db.collection("courses").save({
 										"class": lastclass,
 										"day": lastday,
@@ -289,7 +282,6 @@ app.get('/sample', function (req, res) {
 										"binarytimes": bindur,
 										"room": lastroom
 									});
-									numclasses++; //Increment number of classes.
 									db.collection("rooms").update({
 										"room": lastroom,
 										"day": lastday
@@ -312,15 +304,18 @@ app.get('/sample', function (req, res) {
 					});
 				}
 			});
-			console.log(numclasses);
-			res.send('Check your console! And your database!');
+            console.log("Database initialized.\n");
 
 		}
 	})
+}
 
+app.get('/sample', function (request, response) {
+	var output = "some output here";
+    response.render('main', {somedata:output});
 });
 
-app.post('/',function(request, response) {
+app.post('/sample',function(request, response) {
     var rooms = [];
     var start = request.body['start'];
     var end = request.body['end'];
@@ -331,6 +326,7 @@ app.post('/',function(request, response) {
 });
 
 //getRoomData();
+initialize();
 getFreeRooms("7:00 am","9:00 am");
 
 app.listen('8081');
