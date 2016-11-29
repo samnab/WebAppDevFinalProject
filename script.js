@@ -2,12 +2,12 @@ $(document).ready(function () {
 	var OWMApiKey = "1eb3724098349c776aa10b48e8ec1d53";
 	var calendar = $("#calendar");
 
-	if (navigator.geolocation) {
-		console.log("geolocation is supported!")
-		setTimeout(getWeatherData, 1000);
-	} else {
-		console.log("geoloaction is not supported");
-	}
+	// if (navigator.geolocation) {
+	// 	console.log("geolocation is supported!")
+	// 	setTimeout(getWeatherData, 1000);
+	// } else {
+	// 	console.log("geoloaction is not supported");
+	// }
 
 	function getWeatherData() {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -41,8 +41,8 @@ $(document).ready(function () {
 			right: 'today, prev,next'
 		},
 		theme: false,
-		defaultView: 'agendaWeek',
-		defaultDate: '2016-11-10',
+		defaultView: 'list',
+		defaultDate: moment().format("YYYY-MM-DD"),
 		disableDragging: true,
 		navLinks: true, // can click day/week names to navigate views
 		dayClick: function (date, jsEvent, view) {

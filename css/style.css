@@ -146,6 +146,12 @@ a.fc-day-grid-event {
 	color: #fff;
 }
 
+.fc-list-item:hover td {
+	background: #7d6fb6;
+}
+.fc-unthemed .fc-list-empty {
+	background: #7d6fb6;
+}
 /* COLOURS */
 .bg-white {
 	background: #fff;
