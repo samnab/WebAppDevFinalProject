@@ -1,23 +1,22 @@
-$(document).ready(function(){
+$(document).ready(function () {
 	var OWMApiKey = "1eb3724098349c776aa10b48e8ec1d53";
 	var calendar = $("#calendar");
 
-	if(navigator.geolocation){
+	if (navigator.geolocation) {
 		console.log("geolocation is supported!")
 		setTimeout(getWeatherData, 1000);
-	}else{
+	} else {
 		console.log("geoloaction is not supported");
 	}
 
-	function getWeatherData(){
-		navigator.geolocation.getCurrentPosition(function(position){
+	function getWeatherData() {
+		navigator.geolocation.getCurrentPosition(function (position) {
 			console.log("lat: " + position.coords.latitude + " lon: " + position.coords.longitude);
 			$.ajax({
-				url: "http://api.openweathermap.org/data/2.5/weather?lat=" + position.coords.latitude
-				+"&lon=" + position.coords.longitude + "&units=metric&APPID=" + OWMApiKey,
+				url: "http://api.openweathermap.org/data/2.5/weather?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&units=metric&APPID=" + OWMApiKey,
 				type: "GET",
 				dataType: "json",
-				success: function(data){
+				success: function (data) {
 					$(".weather-locale").html(
 						"" + data.name
 					);
@@ -28,25 +27,25 @@ $(document).ready(function(){
 					weathericon.removeClass('wi wi-day-snow-wind');
 					weathericon.addClass('wi wi-owm-' + data.weather[0].id);
 				},
-				error: function(){
-						console.log("error has occured with downloadWeather");
+				error: function () {
+					console.log("error has occured with downloadWeather");
 				}
 			});
 		});
 	}
 
 	calendar.fullCalendar({
-    header:{
-      left:   'title',
-      center: '',
-      right:  'today, prev,next'
-    },
-    theme: false,
+		header: {
+			left: 'title',
+			center: '',
+			right: 'today, prev,next'
+		},
+		theme: false,
 		defaultView: 'agendaWeek',
 		defaultDate: '2016-11-10',
 		disableDragging: true,
 		navLinks: true, // can click day/week names to navigate views
-		dayClick: function(date, jsEvent, view){
+		dayClick: function (date, jsEvent, view) {
 			calendar.fullCalendar('gotoDate', date);
 			calendar.fullCalendar('changeView', 'agendaDay');
 
@@ -111,24 +110,24 @@ $(document).ready(function(){
 				start: '2016-11-28'
 			}
 		]
-  });
+	});
 
-	$('.btn-selector').click(function() {
+	$('.btn-selector').click(function () {
 		$(this).closest('.row').find('.btn-selector').removeClass('selected');
 		var type = $(this).attr('data-type');
-		switch(type) {
-			case 'day':
-			  calendar.fullCalendar('changeView', 'agendaDay');
-				break;
-			case 'week':
-			  calendar.fullCalendar('changeView', 'agendaWeek');
-				break;
-			case 'month':
-			  calendar.fullCalendar('changeView', 'month');
-				break;
-			case 'list':
-			  calendar.fullCalendar('changeView', 'listWeek');
-				break;
+		switch (type) {
+		case 'day':
+			calendar.fullCalendar('changeView', 'agendaDay');
+			break;
+		case 'week':
+			calendar.fullCalendar('changeView', 'agendaWeek');
+			break;
+		case 'month':
+			calendar.fullCalendar('changeView', 'month');
+			break;
+		case 'list':
+			calendar.fullCalendar('changeView', 'listWeek');
+			break;
 		}
 		$(this).addClass('selected');
 	});
@@ -136,20 +135,18 @@ $(document).ready(function(){
 	// Equalize calendar columns' height
 	function equalize_height() {
 		var max_h = $('.calendar-right').height();
-		$('.calendar-left').css('height', max_h+80);
+		$('.calendar-left').css('height', max_h + 80);
 	}
 
-	if($(this).width()>=768)
+	if ($(this).width() >= 768)
 		equalize_height();
 
-	$(window).resize(function() {
+	$(window).resize(function () {
 		console.log($(this).width());
-		if($(this).width()>=768)
+		if ($(this).width() >= 768)
 			equalize_height();
 		else
 			$('.calendar-left').css('height', 'auto');
 	});
-
-
 
 });
