@@ -9,20 +9,20 @@ var app = express();
 var today = new Date();
 
 var day_of_week = "ERROR";
-if(today.getDay() == 0){
-    day_of_week = " SUN";
-} else if(today.getDay() == 1){
-    day_of_week = " MON";
-} else if(today.getDay() == 2){
-    day_of_week = " TUE";
-} else if(today.getDay() == 3){
-    day_of_week = " WED";
-} else if(today.getDay() == 4){
-    day_of_week = " THU";
-} else if(today.getDay() == 5){
-    day_of_week = " FRI";
-} else if(today.getDay() == 6){
-    day_of_week = " SAT";
+if (today.getDay() == 0) {
+	day_of_week = " SUN";
+} else if (today.getDay() == 1) {
+	day_of_week = " MON";
+} else if (today.getDay() == 2) {
+	day_of_week = " TUE";
+} else if (today.getDay() == 3) {
+	day_of_week = " WED";
+} else if (today.getDay() == 4) {
+	day_of_week = " THU";
+} else if (today.getDay() == 5) {
+	day_of_week = " FRI";
+} else if (today.getDay() == 6) {
+	day_of_week = " SAT";
 }
 
 
@@ -121,11 +121,11 @@ function dec2bin(dec) {
 	return (dec >>> 0).toString(2);
 }
 
-function getFreeRooms(start,finish){
-    //returns an array of rooms that are free from the given start to finish time
-    var timestocheck = getDurationBits(start,finish);
-    console.log(timestocheck.toString());
-    var roomsout = [];
+function getFreeRooms(start, finish) {
+	//returns an array of rooms that are free from the given start to finish time
+	var timestocheck = getDurationBits(start, finish);
+	console.log(timestocheck.toString());
+	var roomsout = [];
 	mongodb.connect("mongodb://localhost:27017/coursedb", function (err, db) {
 		if (err) {
 			return console.dir(err);
@@ -135,22 +135,22 @@ function getFreeRooms(start,finish){
 			room: {
 				$regex: /^((?!ONLINE).)*$/
 			},
-            day: day_of_week,
-            times: {
-                $bitsAllClear: timestocheck
-            }
+			day: day_of_week,
+			times: {
+				$bitsAllClear: timestocheck
+			}
 		}).toArray(function (err, item) {
-            var count = 0;
+			var count = 0;
 			item.forEach(function (i) {
-                roomsout.push(i);
-                count++;
-            });
-            console.log("retrieved " + count + " records");
+				roomsout.push(i);
+				count++;
+			});
+			console.log("retrieved " + count + " records");
 		});
 
 	});
-    return roomsout;
-    //data can be accessed like roomsout[0].room
+	return roomsout;
+	//data can be accessed like roomsout[0].room
 }
 
 function dateReturn(day) {
@@ -202,8 +202,10 @@ function getRoomData() {
 				var times = time.split("-");
 
 				var title = item.room;
-				var start = '2017-01-0' + dateReturn(item.day) + "t" + times[0];
-				var end = '2017-01-0' + dateReturn(item.day) + "t" + times[1];
+				var start = '2017-01-0' + dateReturn(item.day) + "T" + times[0];
+				var end = '2017-01-0' + dateReturn(item.day) + "T" + times[1];
+				start = start.slice(0, -3);
+				end = end.slice(0, -3);
 
 				var obj = {
 					title: title,
@@ -224,8 +226,8 @@ function getRoomData() {
 }
 
 
-function initialize(){
-    // Placeholder URL for now.
+function initialize() {
+	// Placeholder URL for now.
 
 	page_url = 'http://www.imdb.com/title/tt1229340/';
 
@@ -340,7 +342,7 @@ function initialize(){
 					});
 				}
 			});
-            console.log("Database initialized.\n");
+			console.log("Database initialized.\n");
 
 		}
 	})
@@ -348,22 +350,26 @@ function initialize(){
 
 app.get('/sample', function (request, response) {
 	var output = "some output here";
-    response.render('main', {somedata:output});
+	response.render('main', {
+		somedata: output
+	});
 });
 
-app.post('/sample',function(request, response) {
-    var rooms = [];
-    var start = request.body['start'];
-    var end = request.body['end'];
-    rooms = getFreeRooms(start,end);
-    //[EDIT HERE]: edit rooms into a more nicely-formatted result
-    var output = "Formatted output goes here."
-    response.render('main', {somedata:output});
+app.post('/sample', function (request, response) {
+	var rooms = [];
+	var start = request.body['start'];
+	var end = request.body['end'];
+	rooms = getFreeRooms(start, end);
+	//[EDIT HERE]: edit rooms into a more nicely-formatted result
+	var output = "Formatted output goes here."
+	response.render('main', {
+		somedata: output
+	});
 });
 
 getRoomData();
 initialize();
-getFreeRooms("7:00 am","9:00 am");
+getFreeRooms("7:00 am", "9:00 am");
 
 app.listen('8081');
 console.log('Connected on port 8081.');

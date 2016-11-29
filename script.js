@@ -44,7 +44,7 @@ $(document).ready(function () {
 		},
 		theme: false,
 		defaultView: 'list',
-		defaultDate: moment().format("YYYY-MM-DD"),
+		defaultDate: '2017-01-06',
 		disableDragging: true,
 		navLinks: true, // can click day/week names to navigate views
 		dayClick: function (date, jsEvent, view) {
