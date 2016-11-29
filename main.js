@@ -11,17 +11,17 @@ var today = new Date();
 var day_of_week = "ERROR";
 if(today.getDay() == 0){
     day_of_week = " SUN";
-} else if(today.getDay() == 0){
+} else if(today.getDay() == 1){
     day_of_week = " MON";
-} else if(today.getDay() == 0){
+} else if(today.getDay() == 2){
     day_of_week = " TUE";
-} else if(today.getDay() == 0){
+} else if(today.getDay() == 3){
     day_of_week = " WED";
-} else if(today.getDay() == 0){
+} else if(today.getDay() == 4){
     day_of_week = " THU";
-} else if(today.getDay() == 0){
+} else if(today.getDay() == 5){
     day_of_week = " FRI";
-} else if(today.getDay() == 0){
+} else if(today.getDay() == 6){
     day_of_week = " SAT";
 }
 
@@ -125,7 +125,7 @@ function getFreeRooms(start,finish){
     //returns an array of rooms that are free from the given start to finish time
     var timestocheck = getDurationBits(start,finish);
     console.log(timestocheck.toString());
-    var roomsout = allrooms.slice();
+    var roomsout = [];
 	mongodb.connect("mongodb://localhost:27017/coursedb", function (err, db) {
 		if (err) {
 			return console.dir(err);
@@ -135,7 +135,7 @@ function getFreeRooms(start,finish){
 			room: {
 				$regex: /^((?!ONLINE).)*$/
 			},
-            day: day,
+            day: day_of_week,
             times: {
                 $bitsAllClear: timestocheck
             }
