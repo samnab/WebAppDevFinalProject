@@ -1,4 +1,8 @@
 # WebAppDevFinalProject
+# Contributers
+Nabeel Malik (100491453)
+Sheron Balasingam (100504990)
+Alexander Crawford (100569102)
 
 ## Installation instructions
 1. Have mongod running
